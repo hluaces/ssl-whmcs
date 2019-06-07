@@ -281,7 +281,20 @@ function namecheapssl_getSslTypes($returnAdvanced = false) {
      * get remote cert list
      */
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, 'https://www.namecheap.com/syndicated/ssl-certificates/get-type-list.aspx');
+   /**
+     * Namecheap support has been unable to even acknowledge the fact that
+     * their API is being proxied by CloudFlare, which means that every other
+     * call is being intercepted by their security measures (the ones that
+     * force you to fill a captacha).
+     *
+     * As this is something born out of some incident a few weeks ago, they
+     * didn't even consider that it could affect some other parts of their
+     * business operation.
+     *
+     * So far this is the quickest (probably dirtiest too) thing that can be
+     * done to solve it, as this endpoint's answer doesnt change that often.
+     */
+    curl_setopt($ch, CURLOPT_URL, 'https://pastebin.com/raw/qH8SrYbZ');
     curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
     curl_setopt($ch, CURLOPT_HEADER, 0);
